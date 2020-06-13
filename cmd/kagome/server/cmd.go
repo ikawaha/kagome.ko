@@ -1,4 +1,4 @@
-// Copyright 2015 ikawaha
+// Copyright 2020 ikawaha
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ikawaha/kagome.ipadic/tokenizer"
+	"github.com/ikawaha/kagome.ko/tokenizer"
 )
 
 // subcommand property
@@ -89,7 +89,7 @@ func OptionCheck(args []string) (err error) {
 func command(opt *option) error {
 	var dic tokenizer.Dic
 	if opt.sysdic == "simple" {
-		dic = tokenizer.SysDicIPASimple()
+		dic = tokenizer.SysDicKOSimple()
 	} else {
 		dic = tokenizer.SysDic()
 	}
@@ -554,20 +554,20 @@ function cb(data, status) {
             reading = val.features[6];
             pronoun = val.features[9];
             break;
-          case 9: // ipa
+          case 9: // ko
             pos = val.features.slice(0,5).join(",")
             base = val.features[6];
             reading = val.features[7];
             pronoun = val.features[8];
             break;
-          case 7: // ipa
+          case 7: // ko
             pos = val.features.slice(0,5).join(",")
             base = val.features[6];
             break;
           case 6: // unidic
             pos = val.features.slice(0,5).join(",")
             break;
-          case 3: // ipa
+          case 3: // ko
             pos = val.features[0];
             base = val.features[1];
             reading = val.features[2];

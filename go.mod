@@ -1,3 +1,3 @@
-module github.com/ikawaha/kagome.ipadic
+module github.com/ikawaha/kagome.ko
 
-go 1.12
+go 1.14

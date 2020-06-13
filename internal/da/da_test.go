@@ -1,4 +1,4 @@
-// Copyright 2015 ikawaha
+// Copyright 2020 ikawaha
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ func TestDaBuildAndSearch02(t *testing.T) {
 func TestDaBuildAndSearch03(t *testing.T) {
 	keywords := []string{
 		"12345",
-		"2345",
+		"2020",
 		"１２３",
 		"abc",
 		"ABCD",
@@ -325,7 +325,7 @@ func TestDaEfficiency01(t *testing.T) {
 }
 
 func TestDaTorture(t *testing.T) {
-	const testdata = "_testdata/words.txt"
+	const testdata = "testdata/words.txt"
 	fp, err := os.Open(testdata)
 	if err != nil {
 		t.Fatalf("unexpected error, %v", err)

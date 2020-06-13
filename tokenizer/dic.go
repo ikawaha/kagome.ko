@@ -1,4 +1,4 @@
-// Copyright 2015 ikawaha
+// Copyright 2020 ikawaha
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,26 +14,26 @@
 
 package tokenizer
 
-import "github.com/ikawaha/kagome.ipadic/internal/dic"
+import "github.com/ikawaha/kagome.ko/internal/dic"
 
 // Dic represents a dictionary.
 type Dic struct {
 	dic *dic.Dic
 }
 
-// SysDic returns the system dictionary (IPA dictionary).
+// SysDic returns the system dictionary (KO dictionary).
 func SysDic() Dic {
 	return Dic{dic.SysDic()}
 }
 
-// SysDicIPA returns the IPA dictionary as the system dictionary.
-func SysDicIPA() Dic {
-	return Dic{dic.SysDicIPA()}
+// SysDicKO returns the KO dictionary as the system dictionary.
+func SysDicKO() Dic {
+	return Dic{dic.SysDicKO()}
 }
 
-// SysDicIPASimple returns the simple IPA dictionary as the system dictionary (w/o contents).
-func SysDicIPASimple() Dic {
-	return Dic{dic.SysDicIPASimple()}
+// SysDicKOSimple returns the simple KO dictionary as the system dictionary (w/o contents).
+func SysDicKOSimple() Dic {
+	return Dic{dic.SysDicKOSimple()}
 }
 
 // NewDic loads a dictionary from a file.

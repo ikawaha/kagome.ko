@@ -1,4 +1,4 @@
-// Copyright 2015 ikawaha
+// Copyright 2020 ikawaha
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,10 +19,10 @@ import (
 	"testing"
 	"unicode/utf8"
 
-	"github.com/ikawaha/kagome.ipadic/internal/dic"
+	"github.com/ikawaha/kagome.ko/internal/dic"
 )
 
-func TestLatticeBuild01(t *testing.T) {
+func TestLatticeBuild(t *testing.T) {
 	la := New(dic.SysDic(), nil)
 	if la == nil {
 		t.Error("cannot new a lattice")
@@ -54,53 +54,7 @@ func TestLatticeBuild01(t *testing.T) {
 	}
 }
 
-func TestLatticeBuild02(t *testing.T) {
-	la := New(dic.SysDic(), nil)
-	if la == nil {
-		t.Fatal("cannot new a lattice")
-	}
-	defer la.Free()
-
-	inp := "あ"
-	la.Build(inp)
-	if la.Input != inp {
-		t.Errorf("got %v, expected %v", la.Input, inp)
-	}
-	bos := node{ID: -1}
-	eos := node{ID: -1, Start: 1}
-	if len(la.list) != 3 {
-		t.Errorf("lattice initialize error: got %v, expected has 2 eos/bos nodes", la.list)
-	} else if len(la.list[0]) != 1 || *la.list[0][0] != bos {
-		t.Errorf("lattice initialize error: got %v, expected %v", *la.list[0][0], bos)
-	} else if len(la.list[2]) != 1 || *la.list[2][0] != eos {
-		t.Errorf("lattice initialize error: got %v, expected %v", *la.list[2][0], eos)
-	}
-
-	expected := 4
-	if len(la.list[1]) != expected {
-		t.Fatalf("lattice initialize error: got %v, expected %v", len(la.list[1]), expected)
-	}
-	l := la.list[1]
-	for _, v := range l {
-		if v.Surface != inp {
-			t.Errorf("lattice initialize error: got %+v, expected surface %s", v, inp)
-		}
-		if v.Class != KNOWN {
-			t.Errorf("lattice initialize error: got %+v, expected class KNOWN", v)
-		}
-	}
-	if len(la.Output) != 0 {
-		t.Errorf("lattice initialize error: got %v, expected empty", la.Output)
-	}
-	if la.dic == nil {
-		t.Errorf("lattice initialize error: dic is nil")
-	}
-	if la.udic != nil {
-		t.Errorf("lattice initialize error: got %v, expected empty", la.udic)
-	}
-}
-
-func TestLatticeBuild03(t *testing.T) {
+func TestLatticeBuildWithUserDict(t *testing.T) {
 
 	const udicPath = "../../_sample/userdic.txt"
 
@@ -135,72 +89,11 @@ func TestLatticeBuild03(t *testing.T) {
 	}
 }
 
-func TestLatticeBuild04(t *testing.T) {
-	la := New(dic.SysDic(), nil)
-	if la == nil {
-		t.Fatal("cannot new a lattice")
-	}
-	defer la.Free()
-
-	inp := "ポポピ"
-	la.Build(inp)
-	if la.Input != inp {
-		t.Errorf("got %v, expected %v", la.Input, inp)
-	}
-	bos := node{ID: -1}
-	eos := node{ID: -1, Start: 3}
-	if len(la.list) != 5 {
-		t.Errorf("lattice initialize error: got %v, expected has 2 eos/bos nodes", la.list)
-	} else if len(la.list[0]) != 1 || *la.list[0][0] != bos {
-		t.Errorf("lattice initialize error: got %v, expected %v", *la.list[0][0], bos)
-	} else if len(la.list[len(la.list)-1]) != 1 || *la.list[len(la.list)-1][0] != eos {
-		t.Errorf("lattice initialize error: got %v, expected %v", *la.list[len(la.list)-1][0], eos)
-	}
-
-	expected := 7
-	if len(la.list[1]) != expected {
-		t.Fatalf("lattice initialize error: got %v, expected %v", len(la.list[1]), expected)
-	}
-	l := la.list[1]
-	var known, unknown, undef int
-	for _, v := range l {
-		if v.Surface != string([]rune(inp)[0:1]) {
-			t.Errorf("lattice initialize error: got %+v, expected surface %c", v, []rune(inp)[0])
-		}
-		switch v.Class {
-		case KNOWN:
-			known++
-		case UNKNOWN:
-			unknown++
-		default:
-			undef++
-		}
-	}
-	if known != 1 {
-		t.Errorf("lattice initialize error: got KNOWN %d, expected 1, %+v", known, l)
-	}
-	if unknown != 6 {
-		t.Errorf("lattice initialize error: got UNKNOWN %d, expected 6, %+v", unknown, l)
-	}
-	if undef != 0 {
-		t.Errorf("lattice initialize error: got unexpected class %d, %+v", undef, l)
-	}
-	if len(la.Output) != 0 {
-		t.Errorf("lattice initialize error: got %v, expected empty", la.Output)
-	}
-	if la.dic == nil {
-		t.Errorf("lattice initialize error: dic is nil")
-	}
-	if la.udic != nil {
-		t.Errorf("lattice initialize error: got %v, expected empty", la.udic)
-	}
-}
-
-func TestLatticeBuild05(t *testing.T) {
+func TestLatticeBuildMaxUnknownWordLen(t *testing.T) {
 
 	la := New(dic.SysDic(), nil)
 	if la == nil {
-		t.Fatal("cannot new a lattice")
+		t.Fatal("cannot create new a lattice")
 	}
 	defer la.Free()
 
@@ -367,7 +260,7 @@ func TestForward(t *testing.T) {
 	}
 }
 
-func TestBackward01(t *testing.T) {
+func TestBackward(t *testing.T) {
 	la := New(dic.SysDic(), nil)
 	if la == nil {
 		t.Fatal("unexpected error: cannot new a lattice")

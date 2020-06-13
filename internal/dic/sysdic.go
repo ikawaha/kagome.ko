@@ -1,4 +1,4 @@
-// Copyright 2015 ikawaha
+// Copyright 2020 ikawaha
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,46 +18,46 @@ import (
 	"bytes"
 	"sync"
 
-	"github.com/ikawaha/kagome.ipadic/internal/dic/data"
+	"github.com/ikawaha/kagome.ko/internal/dic/data"
 )
 
 const (
-	// IPADicPath represents the internal IPA dictionary path.
-	IPADicPath = "dic/ipa"
+	// KoDicPath represents the internal KO dictionary path.
+	KoDicPath = "dic"
 )
 
 var (
-	sysDicIPAFull     *Dic
-	initSysDicIPAFull sync.Once
+	sysDicKOFull     *Dic
+	initSysDicKOFull sync.Once
 
-	sysDicIPASimple     *Dic
-	initSysDicIPASimple sync.Once
+	sysDicKOSimple     *Dic
+	initSysDicKOSimple sync.Once
 )
 
 // SysDic returns the kagome system dictionary.
 func SysDic() *Dic {
-	return SysDicIPA()
+	return SysDicKO()
 }
 
 // SysDicSimple returns the kagome system dictionary without contents.
 func SysDicSimple() *Dic {
-	return SysDicIPASimple()
+	return SysDicKOSimple()
 }
 
-// SysDicIPA returns the IPA system dictionary.
-func SysDicIPA() *Dic {
-	initSysDicIPAFull.Do(func() {
-		sysDicIPAFull = loadInternalSysDicFull(IPADicPath)
+// SysDicKO returns the KO system dictionary.
+func SysDicKO() *Dic {
+	initSysDicKOFull.Do(func() {
+		sysDicKOFull = loadInternalSysDicFull(KoDicPath)
 	})
-	return sysDicIPAFull
+	return sysDicKOFull
 }
 
-// SysDicIPASimple returns the IPA system dictionary without contents.
-func SysDicIPASimple() *Dic {
-	initSysDicIPASimple.Do(func() {
-		sysDicIPASimple = loadInternalSysDicSimple(IPADicPath)
+// SysDicKOSimple returns the KO system dictionary without contents.
+func SysDicKOSimple() *Dic {
+	initSysDicKOSimple.Do(func() {
+		sysDicKOSimple = loadInternalSysDicSimple(KoDicPath)
 	})
-	return sysDicIPASimple
+	return sysDicKOSimple
 }
 
 func loadInternalSysDicFull(path string) (d *Dic) {

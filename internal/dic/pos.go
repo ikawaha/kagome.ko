@@ -1,4 +1,4 @@
-// Copyright 2017 ikawaha
+// Copyright 2020 ikawaha
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ type POSTable struct {
 }
 
 // POSID represents a ID of part of speech.
-type POSID int16
+type POSID int32
 
 // POS represents a vector of part of speech.
 type POS []POSID

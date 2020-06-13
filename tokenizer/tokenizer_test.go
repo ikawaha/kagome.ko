@@ -1,4 +1,4 @@
-// Copyright 2015 ikawaha
+// Copyright 2020 ikawaha
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,14 +19,14 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/ikawaha/kagome.ipadic/internal/lattice"
+	"github.com/ikawaha/kagome.ko/internal/lattice"
 )
 
 const (
 	testUserDicPath = "../_sample/userdic.txt"
 )
 
-func TestAnalyze01(t *testing.T) {
+func TestAnalyze(t *testing.T) {
 	tnz := New()
 	tokens := tnz.Analyze("", Normal)
 	expected := []Token{
@@ -48,30 +48,7 @@ func TestAnalyze01(t *testing.T) {
 
 }
 
-func TestAnalyze02(t *testing.T) {
-	tnz := New()
-	tokens := tnz.Analyze("関西国際空港", Normal)
-	expected := []Token{
-		{ID: -1, Surface: "BOS"},
-		{ID: 372978, Surface: "関西国際空港", Start: 0, End: 6, Class: TokenClass(lattice.KNOWN)},
-		{ID: -1, Surface: "EOS", Start: 6, End: 6},
-	}
-	if len(tokens) != len(expected) {
-		t.Fatalf("got %v, expected %v", tokens, expected)
-	}
-	for i, tok := range tokens {
-		if tok.ID != expected[i].ID ||
-			tok.Class != expected[i].Class ||
-			tok.Start != expected[i].Start ||
-			tok.End != expected[i].End ||
-			tok.Surface != expected[i].Surface {
-			t.Errorf("got %v, expected %v", tok, expected[i])
-		}
-	}
-
-}
-
-func TestAnalyze03(t *testing.T) {
+func TestAnalyzeWithUserDic(t *testing.T) {
 	tnz := New()
 	udic, e := NewUserDic(testUserDicPath)
 	if e != nil {
@@ -83,29 +60,6 @@ func TestAnalyze03(t *testing.T) {
 		{ID: -1, Surface: "BOS"},
 		{ID: 2, Surface: "関西国際空港", Start: 0, End: 6, Class: TokenClass(lattice.USER)},
 		{ID: -1, Surface: "EOS", Start: 6, End: 6},
-	}
-	if len(tokens) != len(expected) {
-		t.Fatalf("got %v, expected %v", tokens, expected)
-	}
-	for i, tok := range tokens {
-		if tok.ID != expected[i].ID ||
-			tok.Class != expected[i].Class ||
-			tok.Start != expected[i].Start ||
-			tok.End != expected[i].End ||
-			tok.Surface != expected[i].Surface {
-			t.Errorf("got %v, expected %v", tok, expected[i])
-		}
-	}
-
-}
-
-func TestAnalyze04(t *testing.T) {
-	tnz := New()
-	tokens := tnz.Analyze("ポポピ", Normal)
-	expected := []Token{
-		{ID: -1, Surface: "BOS"},
-		{ID: 34, Surface: "ポポピ", Start: 0, End: 3, Class: TokenClass(lattice.UNKNOWN)},
-		{ID: -1, Surface: "EOS", Start: 3, End: 3},
 	}
 	if len(tokens) != len(expected) {
 		t.Fatalf("got %v, expected %v", tokens, expected)
@@ -138,181 +92,6 @@ func TestSearcModeAnalyze01(t *testing.T) {
 	expected := []Token{
 		{ID: -1, Surface: "BOS"},
 		{ID: -1, Surface: "EOS"},
-	}
-	if len(tokens) != len(expected) {
-		t.Fatalf("got %v, expected %v", tokens, expected)
-	}
-	for i, tok := range tokens {
-		if tok.ID != expected[i].ID ||
-			tok.Class != expected[i].Class ||
-			tok.Start != expected[i].Start ||
-			tok.End != expected[i].End ||
-			tok.Surface != expected[i].Surface {
-			t.Errorf("got %v, expected %v", tok, expected[i])
-		}
-	}
-
-}
-
-func TestSearchModeAnalyze02(t *testing.T) {
-	tnz := New()
-	tokens := tnz.Analyze("関西国際空港", Search)
-	expected := []Token{
-		{ID: -1, Surface: "BOS"},
-		{ID: 372968, Surface: "関西", Start: 0, End: 2, Class: TokenClass(lattice.KNOWN)},
-		{ID: 168541, Surface: "国際", Start: 2, End: 4, Class: TokenClass(lattice.KNOWN)},
-		{ID: 307133, Surface: "空港", Start: 4, End: 6, Class: TokenClass(lattice.KNOWN)},
-		{ID: -1, Surface: "EOS", Start: 6, End: 6},
-	}
-
-	if len(tokens) != len(expected) {
-		t.Fatalf("got %v, expected %v", tokens, expected)
-	}
-	for i, tok := range tokens {
-		if tok.Class != expected[i].Class ||
-			tok.Start != expected[i].Start ||
-			tok.End != expected[i].End ||
-			tok.Surface != expected[i].Surface {
-			t.Errorf("got %v, expected %v", tok, expected[i])
-		}
-	}
-
-}
-
-func TestSearchModeAnalyze03(t *testing.T) {
-	tnz := New()
-	udic, e := NewUserDic(testUserDicPath)
-	if e != nil {
-		t.Fatalf("new user dic: unexpected error")
-	}
-	tnz.SetUserDic(udic)
-	tokens := tnz.Analyze("関西国際空港", Search)
-	expected := []Token{
-		{ID: -1, Surface: "BOS"},
-		{ID: 2, Surface: "関西国際空港", Start: 0, End: 6, Class: TokenClass(lattice.USER)},
-		{ID: -1, Surface: "EOS", Start: 6, End: 6},
-	}
-	if len(tokens) != len(expected) {
-		t.Fatalf("got %v, expected %v", tokens, expected)
-	}
-	for i, tok := range tokens {
-		if tok.ID != expected[i].ID ||
-			tok.Class != expected[i].Class ||
-			tok.Start != expected[i].Start ||
-			tok.End != expected[i].End ||
-			tok.Surface != expected[i].Surface {
-			t.Errorf("got %v, expected %v", tok, expected[i])
-		}
-	}
-
-}
-
-func TestSearchModeAnalyze04(t *testing.T) {
-	tnz := New()
-	tokens := tnz.Analyze("ポポピ", Search)
-	expected := []Token{
-		{ID: -1, Surface: "BOS"},
-		{ID: 34, Surface: "ポポピ", Start: 0, End: 3, Class: TokenClass(lattice.UNKNOWN)},
-		{ID: -1, Surface: "EOS", Start: 3, End: 3},
-	}
-	if len(tokens) != len(expected) {
-		t.Fatalf("got %v, expected %v", tokens, expected)
-	}
-	for i, tok := range tokens {
-		if tok.ID != expected[i].ID ||
-			tok.Class != expected[i].Class ||
-			tok.Start != expected[i].Start ||
-			tok.End != expected[i].End ||
-			tok.Surface != expected[i].Surface {
-			t.Errorf("got %v, expected %v", tok, expected[i])
-		}
-	}
-
-}
-
-func TestExtendedModeAnalyze01(t *testing.T) {
-	tnz := New()
-	tokens := tnz.Analyze("", Extended)
-	expected := []Token{
-		{ID: -1, Surface: "BOS"},
-		{ID: -1, Surface: "EOS"},
-	}
-	if len(tokens) != len(expected) {
-		t.Fatalf("got %v, expected %v", tokens, expected)
-	}
-	for i, tok := range tokens {
-		if tok.ID != expected[i].ID ||
-			tok.Class != expected[i].Class ||
-			tok.Start != expected[i].Start ||
-			tok.End != expected[i].End ||
-			tok.Surface != expected[i].Surface {
-			t.Errorf("got %v, expected %v", tok, expected[i])
-		}
-	}
-
-}
-
-func TestExtendedModeAnalyze02(t *testing.T) {
-	tnz := New()
-	tokens := tnz.Analyze("関西国際空港", Extended)
-	expected := []Token{
-		{ID: -1, Surface: "BOS"},
-		{ID: 372968, Surface: "関西", Start: 0, End: 2, Class: TokenClass(lattice.KNOWN)},
-		{ID: 168541, Surface: "国際", Start: 2, End: 4, Class: TokenClass(lattice.KNOWN)},
-		{ID: 307133, Surface: "空港", Start: 4, End: 6, Class: TokenClass(lattice.KNOWN)},
-		{ID: -1, Surface: "EOS", Start: 6, End: 6},
-	}
-	if len(tokens) != len(expected) {
-		t.Fatalf("got %v, expected %v", tokens, expected)
-	}
-	for i, tok := range tokens {
-		if tok.Class != expected[i].Class ||
-			tok.Start != expected[i].Start ||
-			tok.End != expected[i].End ||
-			tok.Surface != expected[i].Surface {
-			t.Errorf("got %v, expected %v", tok, expected[i])
-		}
-	}
-
-}
-
-func TestExtendedModeAnalyze03(t *testing.T) {
-	tnz := New()
-	udic, e := NewUserDic(testUserDicPath)
-	if e != nil {
-		t.Fatalf("new user dic: unexpected error")
-	}
-	tnz.SetUserDic(udic)
-	tokens := tnz.Analyze("関西国際空港", Extended)
-	expected := []Token{
-		{ID: -1, Surface: "BOS"},
-		{ID: 2, Surface: "関西国際空港", Start: 0, End: 6, Class: TokenClass(lattice.USER)},
-		{ID: -1, Surface: "EOS", Start: 6, End: 6},
-	}
-	if len(tokens) != len(expected) {
-		t.Fatalf("got %v, expected %v", tokens, expected)
-	}
-	for i, tok := range tokens {
-		if tok.ID != expected[i].ID ||
-			tok.Class != expected[i].Class ||
-			tok.Start != expected[i].Start ||
-			tok.End != expected[i].End ||
-			tok.Surface != expected[i].Surface {
-			t.Errorf("got %v, expected %v", tok, expected[i])
-		}
-	}
-
-}
-
-func TestExtendedModeAnalyze04(t *testing.T) {
-	tnz := New()
-	tokens := tnz.Analyze("ポポピ", Extended)
-	expected := []Token{
-		{ID: -1, Surface: "BOS"},
-		{ID: 34, Surface: "ポ", Start: 0, End: 1, Class: TokenClass(lattice.DUMMY)},
-		{ID: 34, Surface: "ポ", Start: 1, End: 2, Class: TokenClass(lattice.DUMMY)},
-		{ID: 34, Surface: "ピ", Start: 2, End: 3, Class: TokenClass(lattice.DUMMY)},
-		{ID: -1, Surface: "EOS", Start: 3, End: 3},
 	}
 	if len(tokens) != len(expected) {
 		t.Fatalf("got %v, expected %v", tokens, expected)
