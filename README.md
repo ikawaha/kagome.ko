@@ -25,7 +25,7 @@ import (
 
 func main() {
 	t := tokenizer.New()
-	tokens := t.Tokenize("초밥이 먹고 싶다.")
+	tokens := t.Tokenize("초밥이먹고싶다.")
 	for _, token := range tokens {
 		if token.Class == tokenizer.DUMMY {
 			// BOS: Begin Of Sentence, EOS: End Of Sentence.
