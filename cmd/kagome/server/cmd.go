@@ -374,7 +374,7 @@ var graphHTML = `
       }
   </style>
   <meta charset="UTF-8">
-  <title>Kagome demo - Japanese morphological analyzer</title>
+  <title>Kagome demo - Korean tokenizer</title>
   <!-- for IE6-8 support of HTML elements -->
   <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -499,7 +499,7 @@ var demoHTML = `
     }
   </style>
   <meta charset="UTF-8">
-  <title>Kagome demo - Japanese morphological analyzer</title>
+  <title>Kagome demo - Korean tokenizer</title>
   <!-- for IE6-8 support of HTML elements -->
   <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -512,7 +512,7 @@ var demoHTML = `
   <form class="frm" action="/_demo" method="POST" oninput="tokenize()" target="_blank">
     <div id="box">
     <textarea id="inp" class="txar" rows="3" name="s"
-       placeholder="Enter Japanese text below.">{{.Sentence}}</textarea>
+       placeholder="Enter Korean text below.">{{.Sentence}}</textarea>
     <div id="rbox">
       <div><label><input type="radio" name="r" value="Normal" checked>Normal</label></div>
       <div><label><input type="radio" name="r" value="Search" {{if eq .RadioOpt "search"}}checked{{end}}>Search</label></div>
