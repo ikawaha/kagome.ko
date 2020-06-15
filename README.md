@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/ikawaha/kagome.ipadic/tokenizer"
+	"github.com/ikawaha/kagome.ko/tokenizer"
 )
 
 func main() {
